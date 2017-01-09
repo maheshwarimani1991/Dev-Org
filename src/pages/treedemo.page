@@ -1,0 +1,85 @@
+<apex:page standardStylesheets="false" showChat="false" showHeader="false" sidebar="false" standardController="Account" extensions="VisualRelationshipController">
+{!json}
+
+{!Relation}
+<html>
+  <head>
+    <title>Miserables Force</title>
+    
+    <apex:includeScript value="{!URLFOR($Resource.jqueryOn23,'protovis.js')}"/>
+    <!-- <apex:includeScript value="{!URLFOR($Resource.jqueryOn23,'miserables.js')}"/>-->
+    <style type="text/css">
+
+body {
+  margin: 0;
+}
+
+    </style>
+  </head>
+  <body>
+    <apex:variable value="" var="contacts"/>
+    <!--<apex:repeat value="{!Account.contacts}" var="con">
+        <apex:variable value="{!contacts+'{nodeName:"'+con.Name+'", group:2},'}" var="contacts"/>
+       
+    </apex:repeat>-->
+    
+    <script type="text/javascript+protovis">
+var kk='{nodes:[';
+
+//alert('===={{!json}}');
+var miserables = {
+  nodes:[
+    {nodeName:"khillan0", group:1},
+    {nodeName:"Contact1", group:2},
+    {nodeName:"Contact2", group:2},
+    {nodeName:"Contact3", group:2},
+    {nodeName:"Contact4", group:2}
+        
+  ],
+  links:[
+    {source:1, target:0, value:10},
+    {source:2, target:0, value:10},
+    {source:3, target:0, value:10},
+    {source:4, target:0, value:10}
+    
+    
+  ]
+};
+var str = '{{!json}}';
+//alert(str);
+
+var obj = JSON.parse(str);
+//alert(obj ); 
+miserables =obj; 
+var color = pv.Colors.category19().by(function(d) d.group);
+
+var vis = new pv.Panel()
+    .width(window.innerWidth)
+    .height(window.innerHeight)
+    .fillStyle("white")
+    .event("mousedown", pv.Behavior.pan())
+    .event("mousewheel", pv.Behavior.zoom());
+
+var layout = vis.add(pv.Layout.Force)
+    .nodes(miserables.nodes)
+    .links(miserables.links)
+    .chargeConstant(-200);
+
+layout.link.add(pv.Line);
+
+layout.node.add(pv.Dot)
+    .size(function(d) (d.linkDegree + 4) * Math.pow(this.scale, -1.5))
+    .fillStyle(function(d) d.fix ? "brown" : color(d))
+    .strokeStyle(function() this.fillStyle().darker())
+    .title(function(d) d.nodeName)
+    .event("mousedown", pv.Behavior.drag())
+    .event("drag", layout);
+
+vis.render();
+
+    </script>
+  </body>
+</html>
+
+
+</apex:page>

@@ -1,0 +1,176 @@
+<apex:page sidebar="false" showHeader="false" controller="FecthingForecastData" id="pge">
+    
+    <apex:includeScript value="{!$Resource.vfbootstrap}"/> 
+    <apex:includeScript value="{!$Resource.jQuery2}"/>
+    <script>
+        jQuery(document).ready(function(){
+            //alert('Hii');
+        });
+        function showFiscalYear(){
+            if(jQuery('[id$=choose]').val() == 'Quaterly'){
+                jQuery('[id$=fiscal]').css('display','inline-block');
+                jQuery('[id$=tbl]').css('display','none');
+                jQuery('[id$=fiscal]').show();
+            }
+        }
+    </script>
+    <style type="text/css">
+        inlineeditcss1{
+            width : 170px !important;
+        }
+    </style>    
+    
+    <apex:pagemessages ></apex:pagemessages>
+    <div style="margin-left:12px; margin-top:12px; font-size:15px;"><apex:image url="{!us.FullPhotoUrl}" width="50" height="50"/> <b>{!$User.FirstName} {!$User.LastName}</b></div>
+    
+    <apex:form >
+        <apex:actionFunction name="reRenderPage" action="{!doNothing}" reRender="summaryInfo" />
+    </apex:form>
+    
+    <head>
+        <link rel="stylesheet" type="text/css" href="{!URLFOR($Resource.vfbootstrap,'vfbootstrap/css/bootstrap.css')}"/>
+        <link rel="stylesheet" type="text/css" href="{!URLFOR($Resource.vfbootstrap,'vfbootstrap/css/bootstrap-responsive.css')}" />
+        <link rel="stylesheet" type="text/css" href="{!URLFOR($Resource.vfbootstrap,'vfbootstrap/js/google-code-prettify/prettify.css')}" />
+        <script type="text/javascript" src="{!URLFOR($Resource.vfbootstrap,'vfbootstrap/js/jquery.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.vfbootstrap,'vfbootstrap/js/datatables.js')}"/>
+        <script type="text/javascript" src="{!URLFOR($Resource.vfbootstrap,'vfbootstrap/js/dt_bootstrap.js')}"/>
+    </head>
+        
+    <div id="force" style="text-align:center;font-size:larger;">
+        <div class="container-fluid">
+            <div class="row-fluid" style="width: 98%;">
+                <div class="span12" style="margin-top: 20px;margin-left: 1%; display:inline;" >
+                    <apex:form >
+                        <div style="text-align:left;">
+                            <apex:outputPanel rendered="{!if(users != NULL , true,false)}">
+                                <b> Select Your Sub-ordinates : </b>
+                                <apex:selectList id="choosesub" value="{!SubordinateName}" size="1">
+                                    <apex:selectOptions value="{!items}"></apex:selectOptions>
+                                </apex:selectList>
+                            </apex:outputPanel>
+                        </div>
+                    </apex:form>
+                    <apex:form id="frm1">
+                        <apex:actionFunction action="{!changetype}" name="changetype" reRender="frm1" oncomplete="showFiscalYear();"/>
+                        <div style="text-align:left; display :inline-block; float:left">
+                            <b> Select Your Forecast Type : </b>
+                            <apex:selectList id="choose" value="{!ftype.Forecast_Type__c}" size="1"  onchange="changetype();">
+                                <apex:selectOption itemValue="Monthly" itemLabel="Monthly"/>
+                                <apex:selectOption itemValue="Weekly" itemLabel="Weekly"/>
+                                <apex:selectOption itemValue="Quaterly" itemLabel="Quaterly"/>
+                            </apex:selectList>
+                        </div>
+                        <div  id="fiscal" style="display : none; float:left">
+                            &nbsp;<b> Select Your Fiscal Year : </b>
+                            <apex:selectList id="chooseyear" value="{!FiscalYear}" size="1">
+                                <apex:selectOption itemValue="January" itemLabel="January"/>
+                                <apex:selectOption itemValue="February" itemLabel="February"/>
+                                <apex:selectOption itemValue="March" itemLabel="March"/>
+                                <apex:selectOption itemValue="April" itemLabel="April"/>
+                                <apex:selectOption itemValue="May" itemLabel="May"/>
+                                <apex:selectOption itemValue="June" itemLabel="June"/>
+                                <apex:selectOption itemValue="July" itemLabel="July"/>
+                                <apex:selectOption itemValue="August" itemLabel="August"/>
+                                <apex:selectOption itemValue="September" itemLabel="September"/>
+                                <apex:selectOption itemValue="October" itemLabel="October"/>
+                                <apex:selectOption itemValue="November" itemLabel="November"/>
+                                <apex:selectOption itemValue="December" itemLabel="December"/>
+                            </apex:selectList>
+                        </div>
+                       
+                            <table cellpadding="0" cellspacing="0" border="0"  class="table table-striped table-bordered" style="table-layout:relative; font-size:larger;" id="tbl">
+                                <tr style = "background-color:#f2f3f3; height:22px;">
+                                    <th width="3%"></th>
+                                    <th>User</th>
+                                    <th>Name</th>
+                                    <th>Quota</th>
+                                    <th>
+                                        <apex:outputLabel value="Month" rendered="{!if(ftype.Forecast_Type__c == 'Monthly',true,false)}" style="font-weight:bold;"/>
+                                        <apex:outputLabel value="Day" rendered="{!if(ftype.Forecast_Type__c == 'Weekly',true,false)}" style="font-weight:bold;"/>
+                                        <apex:outputLabel value="Quater" rendered="{!if(ftype.Forecast_Type__c == 'Quaterly',true,false)}" style="font-weight:bold;"/>
+                                    </th>
+                                    <th>Year</th>
+                                    <th>Original Forecast</th>
+                                    <th width="3%"></th>
+                                </tr>
+                                <apex:variable value="{!0}" var="counter"/>
+                                <apex:variable value="{!0}" var="counter1"/>
+                                <apex:repeat value="{!acts}" var="rw">
+                                    <tr>
+                                        <apex:variable value="{!if(rw.Month__c == 'January',1,if(rw.Month__c == 'February',2,if(rw.Month__c == 'March',3,if(rw.Month__c == 'April',4,if(rw.Month__c == 'May',5,if(rw.Month__c == 'June',6,if(rw.Month__c == 'July',7,if(rw.Month__c == 'August',8,if(rw.Month__c == 'September',9,if(rw.Month__c == 'October',10,if(rw.Month__c == 'November',11,if(rw.Month__c == 'December',12,0))))))))))))}" var="currentMonth"/>
+                                        <apex:inlineEditSupport event="ondblClick" showOnEdit="savebutton" changedStyleClass="inlineeditcss1" rendered="{!if(rw.Year__c == currentYear,if(currentMonth >= curMonth,true,if(currentMonth == 0,true,false)),if(rw.Year__c == NextYear,if(currentMonth < curMonth,true,false),false))}"/>
+                                        <td>
+                                            <apex:commandLink action="{!addForecast}" reRender="frm1" rendered="{!if(acts.size-1 = counter1,true,false)}" value="add">
+                                                <!--<apex:image url="{!URLFOR($Resource.AddImage)}" width="20" height="20"/> -->
+                                            </apex:commandLink>
+                                        </td>
+                                        <td>
+                                            <apex:variable value="{!counter1+1}" var="counter1"/>
+                                            <apex:outputField value="{!rw.User__c}" />
+                                        </td>
+                                        <td>
+                                            <apex:outputField value="{!rw.Name}" style="width:180px;"/>
+                                        </td>
+                                        <td>
+                                            <apex:outputField value="{!rw.Quota__c}" style="width:180px;"/>
+                                        </td>
+                                        <td>
+                                            <apex:outputField value="{!rw.Month__c}" style="width:180px;" rendered="{!if(ftype.Forecast_Type__c == 'Monthly',true,false)}"/>
+                                            <apex:outputField value="{!rw.Day__c}" style="width:180px;" rendered="{!if(ftype.Forecast_Type__c == 'Weekly',true,false)}"/>
+                                        </td>
+                                        <td>
+                                            <apex:outputField value="{!rw.Year__c}" style="width:180px;"/>
+                                        </td>
+                                        <td>
+                                            <apex:outputField value="{!rw.Original_Forecast__c}" style="width:180px;"/>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </apex:repeat>
+                                <apex:repeat value="{!addForcst}" var="frcst">
+                                    <tr>
+                                        <td>
+                                            
+                                        </td>
+                                        <td>
+                                            <apex:outputField value="{!frcst.User__c}"/>
+                                        </td>
+                                        <td>
+                                            <apex:inputField value="{!frcst.Name}" style="width:180px;"/>
+                                        </td>
+                                        <td>
+                                            <apex:inputField value="{!frcst.Quota__c}" style="width:180px;"/>
+                                        </td>
+                                        <td>
+                                            <apex:inputField value="{!frcst.Month__c}" style="width:180px;" rendered="{!if(ftype.Forecast_Type__c == 'Monthly',true,false)}"/>
+                                            <apex:inputField value="{!frcst.Day__c}" style="width:180px;" rendered="{!if(ftype.Forecast_Type__c == 'Weekly',true,false)}"/>
+                                        </td>
+                                        <td>
+                                            <apex:selectList id="choose" value="{!frcst.Year__c}" size="1">
+                                                <apex:selectOption itemValue="{!currentYear}" itemLabel="{!currentYear}"/>
+                                                <apex:selectOption itemValue="{!NextYear}" itemLabel="{!NextYear}" rendered="{!if(ftype.Forecast_Type__c == 'Monthly',true,false)}"/>
+                                            </apex:selectList>
+                                        </td>
+                                        <td>
+                                            <apex:inputField value="{!frcst.Original_Forecast__c}" style="width:180px;"/>
+                                        </td>
+                                        <td>
+                                            <apex:commandLink action="{!removeForecast}" reRender="frm1">
+                                                <apex:param name="forecastId" value="{!counter}" assignTo="{!index}"/>
+                                                <apex:image url="{!URLFOR($Resource.RemoveImage)}" width="20" height="20"/> 
+                                            </apex:commandLink>
+                                        </td>
+                                    </tr>
+                                    <apex:variable value="{!counter+1}" var="counter"/>
+                                </apex:repeat>
+                            </table><br/>
+                            <center>
+                                <apex:commandButton action="{!updateList}" value="Save" id="savebutton" onclick="return checkDate();"/>&nbsp;
+                                <apex:commandButton action="{!cancelList}" value="Cancel"/>
+                            </center>
+                    </apex:form>
+                </div>
+            </div>
+        </div>
+    </div>
+</apex:page>

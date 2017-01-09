@@ -1,0 +1,53 @@
+<apex:page sidebar="false" standardController="Opportunity" extensions="RTSchedulerOpportunityCnt" recordSetVar="r">
+    <apex:include pageName="scheduler_script"/>
+    <!-- Left Pane -->
+    <apex:outputPanel styleClass="listViewport" layout="block" style="margin-top:0;vertical-align:top;width:40%;float:left;overflow-x:hidden;">
+        <table>
+            <tbody>
+                <tr>
+                    <td><input type="radio" name="sr" id="account_radio" onclick="location.href='/apex/RTschedulerAccount';return false;" /><label for="account_radio">{!$ObjectType.Account.label}</label></td>
+                    <td><input type="radio" name="sr" id="contact_radio" onclick="location.href='/apex/RTschedulerContact';return false;" /><label for="contact_radio">{!$ObjectType.Contact.label}</label></td>
+                    <td><input type="radio" name="sr" id="opportunity_radio" checked="checked" /><label for="opportunity_radio">{!$ObjectType.Opportunity.label}</label></td>
+                </tr>
+            </tbody>
+        </table>
+        <apex:pageBlock >
+            <apex:panelGrid columns="2">
+                <apex:form >
+                    <apex:outputLabel value="{!$Label.View}: "/>
+                    <apex:selectList value="{!filterId}" size="1">
+                        <apex:actionSupport event="onchange" action="{!changeOrder}" reRender="ViewTable" oncomplete="addDraggable()" />
+                        <apex:selectOptions value="{!listviewoptions}"/>
+                    </apex:selectList>
+                </apex:form>
+            </apex:panelGrid>
+            <apex:form >
+                <apex:actionFunction action="{!changeOrder}" name="changeOrder" reRender="ViewTable" oncomplete="addDraggable()">
+                    <apex:param assignTo="{!orderBy}" name="orderBy" value="" />
+                </apex:actionFunction>
+            </apex:form>
+            <apex:outputPanel id="ViewTable">
+                <table class="CustomTable" style="border:none;border-collapse:collapse;">
+                    <thead>
+                        <tr>
+                            <th onclick="changeOrder('Name')" class="{!IF(orderBy = 'Name', IF(isDesc, 'DESC', 'ASC'), '')}">{!$ObjectType.opportunity.fields.name.label}<img class="x-grid3-sort-icon" src="data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" /></th>
+                            <th onclick="changeOrder('Account.Name')" class="{!IF(orderBy = 'Account.Name', IF(isDesc, 'DESC', 'ASC'), '')}">{!$ObjectType.account.fields.name.label}<img class="x-grid3-sort-icon" src="data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" /></th>
+                            <th onclick="changeOrder('StageName')" class="{!IF(orderBy = 'StageName', IF(isDesc, 'DESC', 'ASC'), '')}">{!$ObjectType.opportunity.fields.StageName.label}<img class="x-grid3-sort-icon" src="data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" /></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!records}" var="i">
+                            <tr class="draggable" style="cursor:move;">
+                                <td><apex:outputLink value="/{!i.Id}">{!i.Name}</apex:outputLink></td>
+                                <td><apex:outputField value="{!i.AccountId}"/></td>
+                                <td><apex:outputField value="{!i.StageName}"/></td>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:outputPanel>
+        </apex:pageBlock>
+    </apex:outputPanel>
+    <!-- Right Pane -->
+    <apex:include pageName="scheduler_right"/>
+</apex:page>

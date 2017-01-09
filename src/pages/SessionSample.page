@@ -1,0 +1,76 @@
+<apex:page controller="SessionSampleController" action="{!constructor}">
+<apex:form >
+<apex:pageBlock > 
+<!--  THIS PAGE BLOCK SECTION ILLUSTRATES HOW TO LIST ALL OBJECTS IN A SPECIFIC BUCKET -->
+<apex:pageBlockSection columns="1" title="List all Objects in selected Bucket">
+
+<apex:actionFunction status="statusForListBucket" action="{!listBucket}" name="listBucket" rerender="listBucketResults">
+            <apex:param name="firstParam" assignTo="{!bucketToList}" value="" />
+            <apex:param name="secondParam" assignTo="{!renderListBucketResults}" value="true" />
+</apex:actionFunction>
+
+<apex:pageBlockSectionItem >
+	<apex:outputPanel >
+		<apex:outputText value="Select the Bucket to list all Objects for:" />
+
+		<apex:selectList onclick="listBucket(this.value)" value="{!bucketToList}" multiselect="false">
+   	 	 	<apex:selectOptions value="{!BucketNames}"/>
+		</apex:selectList><br/>
+	
+	</apex:outputPanel>
+   	
+</apex:pageBlockSectionItem>
+
+<apex:outputPanel id="listBucketResults">
+
+	<apex:actionstatus id="statusForListBucket">
+		<apex:facet name="start">
+			<span style="font-weight:bold; color: red; background-color:white;">
+				&nbsp;&nbsp;&nbsp;Contacting S3 to generate list of Objects..results below will be populated upon response....&nbsp;&nbsp;&nbsp;
+			</span>
+		</apex:facet>
+					
+		<apex:facet name="stop">
+			<apex:outputPanel rendered="{!(!ISNULL(listBucketErrorMsg))}">
+				<span style="font-weight:bold; color: red; background-color:white;">
+					&nbsp;&nbsp;&nbsp;ERROR: {!listBucketErrorMsg}
+				</span>
+			</apex:outputPanel>
+		</apex:facet>
+	</apex:actionstatus>
+    <br/>
+
+	 
+<apex:outputPanel rendered="{!IF(ISNULL(bucketToList) ,false,true)}">
+    <apex:dataTable cellpadding="2" value="{!bucketList}" var="obj">
+      	<apex:facet name="caption">
+      	   <apex:outputText value="List of Objects stored in the Bucket: {!bucketToList}" style="font-weight:bold; color:red;"    	   />
+      	</apex:facet>
+       	
+      	<apex:column width="300" >
+		        <apex:facet name="header">Key</apex:facet>
+			    
+			    <apex:commandLink value="{!obj.Key}" action="{!redirectToS3Key}" target="_blank">
+                	<apex:param name="filename" value="{!obj.Key}"/>
+                </apex:commandLink>
+		</apex:column>
+      	
+      	<apex:column width="300" >
+      	<apex:facet name="header">Last Modified</apex:facet>
+      	<apex:outputText value="{!obj.LastModified}"/>
+      	</apex:column>
+      	
+		<apex:column width="30">
+      	<apex:facet name="header">Size (bytes)</apex:facet>
+      	<apex:outputText value="{!obj.Size}"/>
+      	</apex:column>
+      	
+      </apex:dataTable>	
+
+      </apex:outputPanel>
+    
+      </apex:outputPanel>
+</apex:pageBlockSection>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

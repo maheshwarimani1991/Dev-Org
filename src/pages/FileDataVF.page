@@ -1,0 +1,28 @@
+<apex:page showHeader="false" sidebar="false" controller="FileDocumentCtr" action="{!Files}">
+    <!--<apex:actionStatus onstart="" onstop="" id=""/>-->
+    <apex:form >
+    
+    <apex:pageBlock title="Files" id="pageBlock" >
+        <apex:pageBlockTable value="{!cdoc}" var="cd" rendered="{!NOT(ISNULL(cdoc))}">
+            <!--<apex:column headerValue="File Name" ><a href="/{!cd.Id}">{!cd.Title}</a></apex:column>-->
+            <apex:column width="50px">
+                <apex:facet name="header">   
+                    <apex:commandLink action="{!Files}" reRender="pageBlock" value="File Name{!IF(sortExpression=='title',IF(sortDirection='ASC',' ▼',' ▲'),'')}" id="cmdSort">
+                        <apex:param value="title" name="column" assignTo="{!sortExpression}" ></apex:param>
+                    </apex:commandLink>
+                </apex:facet>
+                <apex:outputLink value="/{!cd.Id}" target="_blank">{!cd.Title}</apex:outputLink>
+            </apex:column>
+            <apex:column value="{!cd.ownerId}">
+                <apex:facet name="header">
+                    <apex:commandLink action="{!Files}" value="OwnerId{!IF(sortExpression=='OwnerId',IF(sortDirection='ASC',' ▼',' ▲'),'')}">
+                        <apex:param value="OwnerId" name="column" assignTo="{!sortExpression}" ></apex:param>
+                    </apex:commandLink>
+                </apex:facet>
+            </apex:column>
+            <!--<apex:column value="{!cd.ownerId}"/>-->
+            <apex:column headerValue="Total no of versions" value="{!countMap[cd]}"/>
+            <apex:column headerValue="Total Space Usage(KB)" value="{!sizeMap[cd]}"/>
+        </apex:pageBlockTable>
+    </apex:pageBlock></apex:form>
+</apex:page>

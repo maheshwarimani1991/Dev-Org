@@ -1,0 +1,12 @@
+<apex:page standardController="Account">
+  <apex:pageBlock title="My Account Contacts" >
+   <apex:pageBlocktable value="{! account.contacts}" var="item">
+      <apex:column value="{!item.name}"/>
+      
+   </apex:pageBlocktable>
+  </apex:pageBlock>    
+  <apex:relatedList list="Cases" />
+  <p>Here's the owner of this account: {! account.Owner.Name}</p>
+  <apex:outputLink value="http://developer.force.com/">Click me!</apex:outputLink>
+  <apex:outputLink value="{! $Page.AccountDisplay}">I am me!</apex:outputLink>
+</apex:page>

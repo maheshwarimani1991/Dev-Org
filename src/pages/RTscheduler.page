@@ -1,0 +1,129 @@
+<apex:page sidebar="false" controller="RTSchedulerCnt">
+    <apex:include pageName="scheduler_script"/>
+    <!-- div onSelectStart="return false;" onMouseDown="return false;" style="-moz-user-select: none; -khtml-user-select: none; user-select: none;" -->
+    <div>
+        <!-- Left Pane -->
+        <div style="margin-top:0;vertical-align:top;width:40%;float:left;">
+            <apex:form >
+                <apex:panelGrid columns="3">
+                    <apex:outputPanel >
+                        <apex:actionSupport >
+                            <apex:selectRadio value="{!selectedType}">
+                                <apex:selectOptions value="{!items}"/>
+                            </apex:selectRadio>
+                        </apex:actionSupport>
+                    </apex:outputPanel>
+                    &nbsp;&nbsp;
+                    <apex:outputPanel >
+                        <apex:commandButton value="{!$Label.Change}" action="{!changeType}" status="status"/>
+                    </apex:outputPanel>
+                </apex:panelGrid>
+            </apex:form>
+
+            <!-- List View Area -->
+            <apex:outputPanel id="ListViewArea">
+                <!-- Account -->
+                <apex:outputPanel rendered="{!isAccount}">
+                    <apex:form >
+                        <apex:pageBlock >
+                            <apex:inputText value="{!searchAct.Name}" />
+                            &nbsp;{!$Label.Rank}:
+                            <apex:inputField value="{!searchAct.Email__c}" style="vertical-align:middle"/>
+                            &nbsp;
+                            <apex:commandButton value="{!$Label.Search}" action="{!doAccountSearch}" rerender="AccountTable" oncomplete="addDraggable()"/>
+                            <div id="AccountData">
+                                <apex:outputPanel id="AccountTable">
+                                    <table border="0" cellspacing="0" class="CustomTable" id="AccountTableArea">
+                                        <tr>
+                                            <th>{!$ObjectType.account.fields.name.label}</th>
+                                            <th>{!$ObjectType.account.label} {!$Label.Rank}</th>
+                                            <th>{!$Label.LastVisitDate}</th>
+                                        </tr>
+                                        <apex:repeat value="{!accountData}" var="acdata">
+                                            <tr id="acdata{!acdata.Id}" class="draggable" style="cursor:move;">
+                                                <td>
+                                                    <apex:outputLink value="/{!acdata.Id}">{!acdata.Name}</apex:outputLink>
+                                                </td>
+                                                <td><apex:outputField value="{!acdata.Email__c}"/></td>
+                                                <td><apex:outputField value="{!acdata.Type}"/></td>
+                                            </tr>
+                                        </apex:repeat>
+                                    </table>
+                                </apex:outputPanel>
+                            </div>
+                        </apex:pageBlock>
+                    </apex:form>
+                </apex:outputPanel>
+
+                <!-- Contact -->
+                <apex:outputPanel rendered="{!isContact}">
+                    <apex:form >
+                        <apex:pageBlock >
+                            <apex:inputText value="{!searchCtc.Name}" />
+                            <apex:inputCheckbox value="{!isContactOwner}" style="vertical-align:-3px"/><apex:outputText escape="false" value="{!$Label.My}{!$ObjectType.contact.label}" />
+                            &nbsp;
+                            <apex:commandButton value="{!$Label.Search}" action="{!doContactSearch}" reRender="ContactTable" oncomplete="addDraggable()"/>
+                            <div id="ContactData">
+                                <apex:outputPanel id="ContactTable">
+                                    <table border="0" cellspacing="0" class="CustomTable" id="ContactTableArea">
+                                        <tr>
+                                            <th>{!$ObjectType.contact.fields.name.label}</th>
+                                            <th>{!$ObjectType.account.fields.name.label}</th>
+                                            <th>{!$Label.LastVisitDate}</th>
+                                        </tr>
+                                        <apex:repeat value="{!contactData}" var="ctcdata">
+                                            <tr id="ctcdata{!ctcdata.Id}" class="draggable" style="cursor:move;">
+                                                <td>
+                                                    <apex:outputLink value="/{!ctcdata.Id}">{!ctcdata.Name}</apex:outputLink>
+                                                </td>
+                                                <td><apex:outputField value="{!ctcdata.AccountId}"/></td>
+                                                <td><apex:outputField value="{!ctcdata.LastActivityDate}"/></td>
+                                            </tr>
+                                        </apex:repeat>
+                                    </table>
+                                </apex:outputPanel>
+                            </div>
+                        </apex:pageBlock>
+                    </apex:form>
+                </apex:outputPanel>
+
+                <!-- Opportunity -->
+                <apex:outputPanel rendered="{!isOpps}">
+                    <apex:form >
+                        <apex:pageBlock >
+                            <apex:inputText value="{!searchOpps.Name}" />
+                            <apex:inputCheckbox value="{!isOppsOwner}" style="vertical-align:-3px"/>{!$Label.My}{!$ObjectType.opportunity.label}
+                            &nbsp;
+                            <apex:commandButton value="{!$Label.Search}" action="{!doOppsSearch}" reRender="OppsTable" oncomplete="addDraggable()"/>
+                            <div id="OppsData">
+                                <apex:outputPanel id="OppsTable">
+                                    <table border="0" cellspacing="0" class="CustomTable" id="OppsTableArea">
+                                        <tr>
+                                            <th style="width:4em;">{!$ObjectType.opportunity.fields.name.label}</th>
+                                            <th>{!$ObjectType.account.fields.name.label}</th>
+                                            <th>{!$ObjectType.opportunity.fields.StageName.label}</th>
+                                            <th>{!$Label.LastVisitDate}</th>
+                                        </tr>
+                                        <apex:repeat value="{!oppsData}" var="opdata">
+                                            <tr id="opdata{!opdata.Id}" class="draggable" style="cursor:move;">
+                                                <td style="width:4em;white-space:normal">
+                                                    <apex:outputLink value="/{!opdata.Id}">{!opdata.Name}</apex:outputLink>
+                                                </td>
+                                                <td style="width:4em;white-space:normal"><apex:outputField value="{!opdata.AccountId}"/></td>
+                                                <td style="width:2em;white-space:normal"><apex:outputField style="width:2em;white-space:normal" value="{!opdata.StageName}"/></td>
+                                                <td style="width:3em;white-space:normal"><apex:outputField value="{!opdata.LastActivityDate}"/></td>
+                                            </tr>
+                                        </apex:repeat>
+                                    </table>
+                                </apex:outputPanel>
+                            </div>
+                        </apex:pageBlock>
+                    </apex:form>
+                </apex:outputPanel>
+
+            </apex:outputPanel>
+        </div>
+        <!-- Right Pane -->
+        <apex:include pageName="scheduler_right"/>
+    </div>
+</apex:page>

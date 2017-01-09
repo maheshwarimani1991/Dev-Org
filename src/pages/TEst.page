@@ -1,0 +1,15 @@
+<apex:page standardController="Opportunity">
+    <apex:includeScript value="/support/console/28.0/integration.js"/>
+    <a HREF="#" onClick="testGenerateConsoleURL();return false" >
+        Click here to generate a console URL
+    </a>
+    <script type="text/javascript">
+        function showConsoleUrl(result) {
+            alert(result.consoleUrl);
+        }
+        function testGenerateConsoleURL() {
+            alert('test');
+            sforce.console.generateConsoleUrl([/apex/pagename, /entityId,www.externalUrl.com, Standard Salesforce Url/entityId], showConsoleUrl);
+        }
+    </script>
+</apex:page>

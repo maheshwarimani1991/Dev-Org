@@ -1,0 +1,3 @@
+<apex:page standardController="OpportunityLineItem" extensions="EditProductCTR" action="{!redirect}">
+  
+</apex:page>

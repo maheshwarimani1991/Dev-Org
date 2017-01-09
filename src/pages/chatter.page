@@ -1,0 +1,26 @@
+<apex:page controller="UserDocumentCtr" sidebar="false" showHeader="false" action="{!Users}">
+    <apex:form >
+        <apex:pageBlock title="Users">
+            <apex:pageBlockTable value="{!uId}" var="usr">
+                <apex:column >
+                    <apex:facet name="header">   
+                        <apex:commandLink action="{!Users}" value="User Name{!IF(sortExpression=='owner.name',IF(sortDirection='ASC',' ▼',' ▲'),'')}" id="cmdSort">
+                            <apex:param value="owner.name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputLink value="/{!usr}" target="_blank">{!nMap[usr]}</apex:outputLink>
+                </apex:column>
+                <!--<apex:column headerValue="User Name" > <a href="/{!usr}" >{!nMap[usr]}</a></apex:column>-->
+                <apex:column value="{!csizeMap[usr]}">
+                    <apex:facet name="header">   
+                        <apex:commandLink action="{!mapsort}" value="Total space usage(KB){!IF(sortExpression=='size',IF(sortDirection='ASC',' ▼',' ▲'),'')}" id="cmdSort1">
+                            <apex:param value="size" name="column" assignTo="{!sortExpression}" ></apex:param>
+                        </apex:commandLink>
+                    </apex:facet>
+                </apex:column>
+                <!--<apex:column value="{!csizeMap[usr]}" headerValue="Total space usage(KB)"/>-->
+                <apex:column value="{!ccountMap[usr]}" headerValue="Total number of files"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

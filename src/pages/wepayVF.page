@@ -1,0 +1,34 @@
+<apex:page controller="wepayctr" sidebar="false">
+<style>
+    .bPageBlock{
+        width : 200% !important;
+        }
+</style>
+<apex:form >
+    <apex:pageBlock id="blk" title="WePay Payment API" >
+        <br/>
+        Select Subscription type : 
+        <apex:selectList value="{!selected}" label="Select Subscription type : " size="1" title="Select Subscription type : ">
+            <apex:selectOptions value="{!options}"/>
+        </apex:selectList>
+        <apex:iframe src="{!iframeurl}" height="300px" width="600px" rendered="{!show}"/>
+        <br/>
+        <apex:pageBlockSection rendered="{!show1}" title="New Plan">
+            <apex:inputText value="{!planName}" label="Plan Name"/>
+            <apex:inputText value="{!planDesc}" label="Plan Description"/>
+            <apex:inputText value="{!Period}" label="Period"/>
+            <apex:inputText value="{!Amount}" label="Amount"/>
+            <center><apex:commandButton value="Create Plan" action="{!creditcard}" reRender="blk"/></center>
+        </apex:pageBlockSection>
+        <apex:commandButton value="New Plan" action="{!showcc}" reRender="blk"/>
+        <br/>
+        <apex:commandButton value="Subscribe to a Plan" action="{!subscribe}" reRender="blk"/>
+        
+        <apex:pageBlockSection title="Single Payment">
+            <apex:iframe src="{!iframeurl1}" height="300px" width="600px" rendered="{!show2}"/><br/>    
+            <apex:commandButton value="Pay" action="{!singlepay}" reRender="blk"/>    
+        </apex:pageBlockSection>
+        
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

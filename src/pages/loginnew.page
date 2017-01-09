@@ -1,0 +1,108 @@
+<apex:page controller="CustomLoginController" doctype="html-5.0" showheader="false" sidebar="false" standardstylesheets="false">
+<apex:form >
+<div class="wrapper">
+<div class="inside">
+<h2>
+Login to Community</h2>
+<div class="form">
+<apex:pagemessages id="error">
+</apex:pagemessages>
+Username
+
+<apex:inputtext styleclass="userNameInput" value="{! username }">
+Password
+
+
+<apex:inputsecret styleclass="passwordInput" value="{! password }">
+<apex:commandlink action="{! login }" styleclass="signInButton" value="SIGN IN">
+</apex:commandlink></apex:inputsecret></apex:inputtext></div>
+<div class="links">
+<a href="https://cloudcatamaran-developer-edition.ap1.force.com/customercommunity/ForgotPassword">Forgot your password?</a> | <a href="https://cloudcatamaran-developer-edition.ap1.force.com/customercommunity/CommunitiesSelfReg">Join our Community</a>
+</div>
+<div class="footer">
+Powered by <a href="http://cloudcatamaran.com/">Cloudcatamaran</a></div>
+</div>
+</div>
+<!-- .wrapper -->
+</apex:form>
+<style>
+    body {
+      background: url('../img/bg.jpg') no-repeat top fixed;
+      font-family: Arial, sans-serif;
+      background-size: 100%;
+  }
+  
+  .wrapper {
+      width: 400px;
+      margin: 50px auto 0 auto;
+      box-shadow: 0 0 10px black;
+      border-radius: 5px;
+      background: white;
+  }
+  
+  .wrapper a:link,
+  .wrapper a:hover,
+  .wrapper a:visited {
+      color: #157bc2;
+      text-decoration: underline;
+  }
+  
+  .wrapper.inside {
+      padding: 10px;
+  }
+  
+  .wrapper h2 {
+      color: #157bc2;
+      display: block;
+      font-size: 20px;
+      text-align: center;
+  }
+  
+  .wrapper p {
+      margin: 0;
+  }
+  
+  .wrapper input {
+      padding: 5px 10px;
+      border: 1px solid grey;
+      width: 360px;
+  }
+  
+  .wrapper.signInButton:link, 
+  .wrapper.signInButton:hover, 
+  .wrapper.signInButton:visited {
+      background: #157bc2;
+      color: white;
+      text-transform: uppercase;
+      width: 100%;
+      display: block;
+      padding: 10px 0;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 3px;
+      margin: 5px 0;
+  }
+  
+  .wrapper.links {
+      text-align: center;
+      font-size: 14px;
+      width: 100%;
+  }
+  
+  .wrapper.footer {
+      text-align: center;
+      font-size: 12px;
+      color: grey;
+      width: 100%;
+      margin-top: 20px;
+  }
+  
+  .wrapper.messageCell {
+      color: red;
+  }
+  
+  .wrapper.messageCell h4 {
+      display: none;
+  }
+</style>
+</apex:page>

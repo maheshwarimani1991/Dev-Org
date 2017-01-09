@@ -1,0 +1,37 @@
+<apex:page docType="html-5.0">
+
+    <apex:remoteObjects >
+        <apex:remoteObjectModel name="Contact" fields="Id,LastName"></apex:remoteObjectModel>
+    </apex:remoteObjects>
+    
+    <div class="mypage">
+        <h2>Latest Contacts</h2>
+        <ul id="cnctList"/>
+    </div> 
+        
+    <script>
+        var ul = document.getElementById("cnctList");
+        alert(ul);
+        var conct = new SObjectModel.Contact();
+        conct.retrieve(
+            {limit: 10},
+            function(error, records){
+                if (error) {
+                    alert(error.message);
+                } else {
+                    var html = "";
+                    console.log(records);
+                    console.log(records[0].get("LastName"));
+                    records.forEach(function(record) {
+                        html = html + "<li><a data-id=" + record.get("Id") + ">" + 
+                                       record.get("LastName") + "</a></li>";
+                    });
+                    ul.innerHTML = html;
+                }
+            }
+            
+            
+        );
+        
+    </script>
+</apex:page>

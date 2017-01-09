@@ -1,0 +1,27 @@
+<project name="Demo ANT Deployement" basedir="." xmlns:sf="antlib:com.salesforce">
+    <property file="build.properties"/>
+    <property environment="env"/>
+
+    <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
+        <classpath>
+            <pathelement location="ant-salesforce.jar" />            
+        </classpath>
+    </taskdef>
+
+    <target name="deployCode">
+        <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="src">
+        </sf:deploy>
+    </target>
+
+    <target name="undeployCode">
+        <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="removecodepkg"/>
+    </target>
+
+  	<target name="proxy">
+		<property name="proxy.host" value=" ProxyURL " />
+		<property name="proxy.port" value="1234" />
+		<property name="proxy.user" value="UserName" />
+		<property name="proxy.pwd" value="Password" />
+		<setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}" proxyuser="${proxy.user}" proxypassword="${proxy.pwd}" />
+  	</target>
+</project>

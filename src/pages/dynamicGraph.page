@@ -1,0 +1,40 @@
+<apex:page sidebar="false" showHeader="false">
+<!-- Google API inclusion -->
+<apex:includeScript id="a" value="https://www.google.com/jsapi" />
+<apex:sectionHeader title="
+Motion Chart by Google - Gapminder" subtitle="Opportunities Probability with Time"/>
+<apex:remoteObjects >
+<!--Name the field you like to query-->
+<apex:remoteObjectModel name="Opportunity" jsShorthand="opp" fields="Name, ExpectedRevenue, Probability, CloseDate"/>
+</apex:remoteObjects>
+<script type="text/javascript">
+// Load the Visualization API and the piechart package.
+google.load('visualization', '1', {'packages':['motionchart']});
+// Set a callback to run when the Google Visualization API is loaded.
+google.setOnLoadCallback(initCharts);
+function initCharts() {
+//Instantiate a reference
+var data = new SObjectModel.opp();
+data.retrieve({ limit: 100 } ,function(err, result){
+//if failure
+if(err) alert(err.message);
+else {
+// Prepare table model for chart with columns
+var data = new google.visualization.DataTable();
+data.addColumn('string', 'Opportunity');
+data.addColumn('date', 'CloseDate');
+data.addColumn('number', 'Probability');
+result.forEach(function(record){
+//var r = result[i];
+data.addRow([record.get("Name"), new Date(record.get("CloseDate")), record.get("Probability")]);
+});
+var chart = new google.visualization.MotionChart(document.getElementById('chart_div'));
+chart.draw(data, {width: 600, height:300});
+}
+});
+}
+</script>
+<body>
+<div id="chart_div" style="width: 600px; height: 300px;"></div>
+</body>
+</apex:page>

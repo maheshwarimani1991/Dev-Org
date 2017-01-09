@@ -1,0 +1,10 @@
+<apex:page >
+ <apex:outputLink value="{!URLFOR($Action.Account.New)}">
+    Create New Account
+</apex:outputLink>
+{!NOW() - $System.OriginDateTime}----------------
+{!NOW()}---------------
+{!$System.OriginDateTime}
+
+
+</apex:page>

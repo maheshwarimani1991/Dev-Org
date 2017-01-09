@@ -1,0 +1,13 @@
+<apex:page >
+    <!-- Right Pane -->
+    <div style="display:block;margin-top:0px;width:59%;float:right;">
+        <apex:form >
+            <div style="position:absolute;left:41%">
+                <h1 style="">{!$User.LastName}&nbsp;{!$User.FirstName}{!$Label.s_Calendar}</h1>
+                &nbsp;&nbsp;&nbsp;
+                <!-- <apex:inputCheckbox style="vertical-align:middle" />&nbsp;{$!Label.ShowWeekend} -->
+            </div>
+            <div id="calendar"></div>
+        </apex:form>
+    </div>
+</apex:page>

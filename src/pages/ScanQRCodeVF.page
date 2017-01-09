@@ -1,0 +1,9 @@
+<apex:page id="pge" controller="ScanQRCodeCTR">
+    <apex:form id="frm">
+        <apex:pageBlock id="pgBlk">
+            <apex:pageBlockSection title="Scan QR Code" id="pgBlkSec">
+                <c:ScanQRCode productUINTemp="" borderColor="red"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

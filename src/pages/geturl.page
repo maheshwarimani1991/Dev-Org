@@ -1,0 +1,8 @@
+<apex:page controller="getUrlCtr">
+  ----{!URLL }----<br/>
+  {!urlVal}<br/>
+  {!hostVal}
+  
+  <apex:form >
+  <apex:commandButton value="save" action="{!geturl}"/></apex:form>
+</apex:page>

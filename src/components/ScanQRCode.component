@@ -1,0 +1,74 @@
+<apex:component id="cmp">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
+    
+    
+    <apex:attribute name="productUINTemp" description="prodUINCode" type="String" required="true"/>
+    <apex:attribute name="borderColor" description="This is color for the border." type="String" required="true"/>
+    <label for="qrCode">Scan QR code </label>&nbsp;&nbsp;
+    <script type="text/javascript">     
+        window.onload = function(){
+            scanFocus();
+        }
+    </script>
+
+    <script>
+        var exe = false;
+        var isClicked = false;
+        var numSubmits = 0;
+        
+        function showDetails(key){
+            //$(frm:ipt_proUIN).ready(function(){
+            //   alert('Bazinga..!!');
+            //});
+            var len = document.getElementById("{!$Component.ipt_proUIN}").value.trim().length;
+            alert('Bazinga..!!');
+            if(len == '15' && !isClicked && !exe){   
+                //alert('Bazinga..!!! ' + len);
+                isClicked = true;
+                exe = true;
+                srchProd();
+                document.getElementById("{!$Component.ipt_proUIN}");
+            }else{
+                isClicked = false;                    
+            }              
+        }
+
+        function checkDoubleSubmit(obj){
+            if (isClicked) {
+                return false;
+            }else {
+                srchProd();
+                isClicked = true;
+                return true;
+            }
+        }
+        
+        function scanFocus(){
+            var abc = document.getElementById("{!$Component.ipt_proUIN}");
+            abc.focus();
+            exe = false;
+        }
+        
+        function disableEnterKey(e){
+            var key;     
+            if(window.event)
+                key = window.event.keyCode; //IE
+            else
+                key = e.which; //firefox    
+            
+            if(key==13)
+                isClicked = false; 
+                
+            return (key != 13);
+        }
+
+        function scanNextProduct(){
+            document.getElementById("{!$Component.ipt_proUIN}").value = '';
+            isClicked = false;
+            exe = false;
+            scanFocus();
+        }
+    </script>
+    <apex:inputText value="{!productUINTemp}" id="ipt_proUIN" onkeypress="return disableEnterKey(event)" onkeyup="showDetails(this)" label="Scan QR code"/>
+    <apex:actionFunction action="{!SearchProduct}" name="srchProd" reRender="pnl" oncomplete="return scanNextProduct()"/> 
+</apex:component>

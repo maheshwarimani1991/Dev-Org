@@ -1,0 +1,77 @@
+<apex:page controller="tableheaderCTR" renderAs="PDF">
+    <head><style type="text/css" media="print">
+table {
+    -fs-table-paginate: paginate;
+    }
+ 
+div.footer {
+   display: block;
+   padding: 10px;                      
+   position: running(footer);
+   line-height: 10px;
+   z-index: 3;
+   color: #A9A9A9;
+   font-family:"Arial Unicode MS";
+   font-size:7.5pt;
+              
+}
+div.header {
+   display: block;                     
+   position: running(header);
+               
+}
+ 
+</style>
+</head>
+<body>
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+  This is your new Page: tableheader
+  <!-- End Default Content REMOVE THIS -->
+  
+  <apex:form >
+      
+      <apex:dataTable value="{!olist}" var="opp" style="table-layout:fixed; width:100%; "  cellpadding="5px" border="1" headerClass="headr">
+        <apex:facet name="header"><apex:outputText style="font-size:small;" value="Price Schedule"/></apex:facet>
+            
+            <apex:column style="overflow:hidden;font-size:small;"> 
+                <apex:facet name="header"><apex:outputText style="font-size:small;" value="Name"/></apex:facet>
+                <apex:outputText value="{!opp.Name}"/>
+            </apex:column>
+            <apex:column style="overflow:hidden;font-size:small;"> 
+                <apex:facet name="header"><apex:outputText style="font-size:small;" value="Amount"/></apex:facet>
+                <apex:outputText value="{!opp.Amount}"/>
+            </apex:column>
+            
+            <apex:facet name="footer">
+                <apex:outputPanel >
+                    <apex:outputText style="font-size:small;" value="Total Basic Amount"/>
+                </apex:outputPanel>
+            </apex:facet>
+        </apex:dataTable>
+        <br/><br/><br/><br/><br/>
+        <table style="table-layout:fixed; width:100%; border-collapse: collapse; " cellpadding="5px" border="1">
+            <thead style="display:table-header-group;">
+                <tr>
+                    <th>NAME</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <apex:repeat value="{!oList}" var="opp">
+                <tr>
+                    <td> {!opp.Name} </td>
+                    <td> {!opp.Amount} </td>
+                </tr>
+                </apex:repeat>
+                
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"> TOTAL AMOUNT </td>
+                </tr>
+            </tfoot>
+        </table>
+    </apex:form>
+    </body>
+</apex:page>

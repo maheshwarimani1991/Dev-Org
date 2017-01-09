@@ -1,0 +1,69 @@
+<apex:page controller="uploadCSVcontroller" sidebar="false">
+    <style>
+        .headerRow {font-weight:bold;text-align:center;}
+        .colRow {text-align:center;color:#FFFFFF;}
+        .actionText{background-color:#3399FF;font-weight:bold;color:#FFFFFF;}
+        .firstcol{ background-color:#6699FF;color:#FFFFFF;font-weight:bold;text-align:center;font-size:14;}
+    </style>
+    <apex:form id="theform" style="margin-left:5%; margin-right:5%;">
+        <apex:sectionHeader title="Feasibilty Upload (from CSV file)" /><hr/><br/>
+        <!--<apex:pagemessages />-->
+        <b> <apex:outputLabel value="Select Object : "/> </b>
+        <apex:selectList id="chooseObject" value="{!objName}" size="1" title="Select Object" label="Select Object">
+            <apex:selectOption itemValue="Feasibilty" itemLabel="Raise Feasibilty"/>
+            <apex:selectOption itemValue="Feasibility Task" itemLabel="Update Feasibility Response"/>
+        </apex:selectList> <br/><br/>  
+        <apex:outputLabel value=" Select CSV : " style="font-weight : bold; width : 40%;"/><apex:inputFile value="{!contentFile}" contentType="text/plain; charset=UTF-8" filename="{!nameFile}" />
+        <apex:commandButton value="Upload" id="theButton" action="{!Results}" status="stat" style="font-weight:bold;width:70px;"/>
+        <apex:actionStatus id="stat" startText="Uploading Leads" styleClass="actionText"/>
+    
+       <p><strong>Please download the Feasibility Templates from the following link: </strong><a href="/015?fcf=00lN0000000hTzR" target="_blank">Feasibility Templates</a></p>
+        <apex:outputPanel id="results">
+            <!--<table>
+                <tr>
+                    <td><b> File Name: </b></td>
+                    <td>{!nameFile}</td>
+                </tr>
+                <tr>
+                    <td><b>Total Record(s): </b></td>
+                    <td>{!rowCount}</td>
+                </tr>
+                <tr>
+                    <td><b>Record(s) Success: </b></td>
+                    <td>{!SuccessRowCount}</td>
+                </tr>
+                <tr>
+                    <td><b>Records(s) Failure: </b></td>
+                    <td>{!FailureRowCount}</td>
+                </tr>
+            </table>-->
+            <apex:outputPanel rendered="{!IF((AttachmentSuccessObj.Id == NULL), FALSE, TRUE)}">
+                <p><b>File Name: </b>{!nameFile}</p>
+                <p><b>Total Record(s): </b>{!rowCount}</p>
+                <p><b>Record(s) Success: </b>{!SuccessRowCount}</p>
+                <p><b>Records(s) Failure: </b>{!FailureRowCount}</p>
+                <p>
+                    <b>Success File: </b>
+                    <a href="/servlet/servlet.FileDownload?file={!AttachmentSuccessObj.Id}" target="_blank">
+                        Download Success File
+                    </a>
+                </p>
+                <p>
+                    <b>Error File: </b>
+                    <a href="/servlet/servlet.FileDownload?file={!AttachmentErrorObj.Id}" target="_blank">
+                        Download Error File
+                    </a>
+                </p>
+            </apex:outputPanel>
+            
+            <!-- <apex:pageBlock >
+                <apex:pageBlockTable value="{!errList}" var="err">
+                    <apex:column value="{!err.row}" headerValue="ROW"/>
+                    <apex:column value="{!err.ErrorCode}" headerValue="ErrorCode"/>
+                    <apex:column value="{!err.ErrorMessage}" headerValue="ErrorMessage"/>
+                </apex:pageBlockTable>
+            </apex:pageBlock> -->
+        </apex:outputPanel>
+    </apex:form>
+    
+</apex:page>
